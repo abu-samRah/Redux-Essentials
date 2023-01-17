@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { selectPosts } from './postsSlices'
+import { selectPosts } from './postsSlice'
 import { Link } from 'react-router-dom'
 
 const PostsList = () => {

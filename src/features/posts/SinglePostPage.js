@@ -1,10 +1,11 @@
 import { useSelector } from 'react-redux'
-import { selectPosById } from './postsSlices'
+import { selectPostById } from './postsSlice'
+import { Link } from 'react-router-dom'
 
 export const SinglePostPage = ({ match }) => {
   const { postId } = match.params
 
-  const post = useSelector(selectPosById(postId))
+  const post = useSelector(selectPostById(postId))
 
   if (!post) {
     return (
@@ -19,6 +20,9 @@ export const SinglePostPage = ({ match }) => {
       <article className="post">
         <h2>{post.title}</h2>
         <p className="post-content">{post.content}</p>
+        <Link to={`/editPost/${post.id}`} className="button">
+          Edit Post
+        </Link>
       </article>
     </section>
   )
