@@ -1,10 +1,12 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   selectPosts,
   fetchPosts,
   selectPostsStatus,
   selectError,
+  selectPostIds,
+  selectPostById,
   STATUS,
 } from './postsSlice'
 import { Link } from 'react-router-dom'
@@ -13,7 +15,8 @@ import { TimeAgo } from './TimeAgo'
 import { ReactionButtons } from './ReactionButtons'
 import { Spinner } from '../../components/Spinner'
 
-const PostExcerpt = ({ post }) => {
+const PostExcerpt = ({ postId }) => {
+  const post = useSelector((state) => selectPostById(state, postId))
   return (
     <article className="post-excerpt">
       <h3>{post.title}</h3>
@@ -34,7 +37,7 @@ const PostExcerpt = ({ post }) => {
 const PostsList = () => {
   const dispatch = useDispatch()
 
-  const posts = useSelector(selectPosts)
+  const orderedPostIds = useSelector(selectPostIds)
   const postsStatus = useSelector(selectPostsStatus)
   const error = useSelector(selectError)
 
@@ -51,12 +54,9 @@ const PostsList = () => {
     content = <Spinner text="Loading..." />
   } else if (postsStatus === STATUS.succeeded) {
     // Sort posts in reverse chronological order by datetime string
-    const orderedPosts = posts
-      .slice()
-      .sort((a, b) => b.date.localeCompare(a.date))
 
-    content = orderedPosts.map((post) => (
-      <PostExcerpt key={post.id} post={post} />
+    content = orderedPostIds.map((postId) => (
+      <PostExcerpt key={postId} postId={postId} />
     ))
   } else if (postsStatus === STATUS.failed) {
     content = <div>{error}</div>
