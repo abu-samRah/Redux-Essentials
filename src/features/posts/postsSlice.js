@@ -84,7 +84,7 @@ export const {
 } = postsAdapter.getSelectors((state) => state.posts)
 
 export const selectPostsByUser = createSelector(
-  [selectPosts, (state, userId) => userId],
+  [selectPosts, (_, userId) => userId],
   (posts, userId) => posts.filter((post) => post.user === userId)
 )
 
